@@ -1,0 +1,4 @@
+# https://diesel.rs/guides/configuring-diesel-cli
+
+[print_schema]
+file = "src/postgres/schema.rs"

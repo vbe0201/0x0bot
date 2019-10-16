@@ -5,4 +5,10 @@ authors = ["Valentin B. <valentin.be@protonmail.com>"]
 edition = "2018"
 
 [dependencies]
+chrono = "0.4.9"
+diesel = { version = "1.4.3", features = ["postgres", "chrono"] }
+log = "0.4.8"
 serenity = "0.7.1"
+
+[dev-dependencies]
+diesel_migrations = { version = "1.4.0", features = ["postgres"] }
