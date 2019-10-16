@@ -5,7 +5,7 @@ WORKDIR /usr/src/bot
 COPY . .
 
 # Compile
-RUN cargo build --release
+RUN cargo install --path .
 
 # Run the instance
-CMD ["cargo run"]
+CMD ["iqbot"]
