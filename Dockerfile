@@ -24,4 +24,4 @@ ENV POSTGRES_DATABASE=$POSTGRES_DATABASE
 RUN cargo install --path .
 
 # Run the instance
-CMD ["iqbot"]
+CMD ["0x0bot"]

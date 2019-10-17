@@ -1,5 +1,5 @@
 [package]
-name = "iqbot"
+name = "0x0bot"
 version = "0.1.0"
 authors = ["Valentin B. <valentin.be@protonmail.com>"]
 edition = "2018"

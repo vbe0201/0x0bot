@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest a feature for IQBot
+about: Suggest a feature for 0x0bot
 
 ---
 

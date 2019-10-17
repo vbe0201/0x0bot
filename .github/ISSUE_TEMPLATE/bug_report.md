@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: File a bug report to help improve IQBot
+about: File a bug report to help improve 0x0bot
 
 ---
 
