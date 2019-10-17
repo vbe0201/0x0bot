@@ -5,6 +5,8 @@ extern crate diesel;
 
 extern crate log;
 
+extern crate kankyo;
+
 #[macro_use]
 extern crate serenity;
 
@@ -32,6 +34,10 @@ fn create_database_url() -> String {
 }
 
 fn main() {
+    // In case a `.env` file is present, export variables from it.
+    // Otherwise assume the environment already provides them.
+    kankyo::load().unwrap_or(());
+
     let token = env::var("DISCORD_TOKEN")
         .expect("Please set the DISCORD_TOKEN environment variable before running the bot.");
 
