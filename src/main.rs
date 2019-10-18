@@ -32,8 +32,8 @@ fn main() {
     // Currently unused.
     let database_pool = db::create_pool(database_url.as_str());
 
-    let mut client =
-        Client::new(&token, DiscordHandler).expect("An error occurred during client creation.");
+    let mut client = Client::new(&token, DiscordHandler { database_pool })
+        .expect("An error occurred during client creation.");
 
     if let Err(why) = client.start() {
         println!("Failed to connect: {:?}", why);
