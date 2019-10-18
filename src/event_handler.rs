@@ -1,6 +1,8 @@
 use log::info;
-use serenity::model::event::ResumedEvent;
-use serenity::{model::gateway::Ready, prelude::*};
+use serenity::{
+    model::{event::ResumedEvent, gateway::Ready},
+    prelude::*,
+};
 
 pub struct DiscordHandler;
 

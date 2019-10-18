@@ -1,4 +1,5 @@
-# https://diesel.rs/guides/configuring-diesel-cli
+# For documentation on how to configure this file,
+# see diesel.rs/guides/configuring-diesel-cli
 
 [print_schema]
-file = "src/postgres/schema.rs"
+file = "src/db/schema.rs"

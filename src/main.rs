@@ -3,9 +3,9 @@ extern crate chrono;
 #[macro_use]
 extern crate diesel;
 
-extern crate log;
+extern crate dotenv;
 
-extern crate kankyo;
+extern crate log;
 
 #[macro_use]
 extern crate serenity;
@@ -15,35 +15,22 @@ use std::env;
 use serenity::prelude::Client;
 
 use self::event_handler::DiscordHandler;
-use diesel::{Connection, PgConnection};
 
+mod db;
 mod event_handler;
-
-#[inline]
-fn create_database_url() -> String {
-    let user = env::var("POSTGRES_USER")
-        .expect("Please set the POSTGRES_USER environment variable before running the bot.");
-    let password = env::var("POSTGRES_PASSWORD")
-        .expect("Please set the POSTGRES_PASSWORD environment variable before running the bot.");
-    let host = env::var("POSTGRES_HOST")
-        .expect("Please set the POSTGRES_HOST environment variable before running the bot.");
-    let database = env::var("POSTGRES_DATABASE")
-        .expect("Please set the POSTGRES_DATABASE environment variable before running the bot.");
-
-    format!("postgresql://{}:{}@{}/{}", user, password, host, database)
-}
 
 fn main() {
     // In case a `.env` file is present, export variables from it.
     // Otherwise assume the environment already provides them.
-    kankyo::load().unwrap_or(());
+    dotenv::dotenv().ok();
 
     let token = env::var("DISCORD_TOKEN")
         .expect("Please set the DISCORD_TOKEN environment variable before running the bot.");
+    let database_url = env::var("DATABASE_URL")
+        .expect("Please set the DATABASE_URL environment variable before running the bot.");
 
     // Currently unused.
-    let postgres_connection = PgConnection::establish(&create_database_url())
-        .expect("Failed to establish a connection to the database!");
+    let database_pool = db::create_pool(database_url.as_str());
 
     let mut client =
         Client::new(&token, DiscordHandler).expect("An error occurred during client creation.");

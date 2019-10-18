@@ -4,12 +4,16 @@ version = "0.1.0"
 authors = ["Valentin B. <valentin.be@protonmail.com>"]
 edition = "2018"
 
+build = "build.rs"
+
 [dependencies]
 chrono = "0.4.9"
-diesel = { version = "1.4.3", features = ["postgres", "chrono"] }
+diesel = { version = "1.4.3", features = ["chrono", "postgres", "r2d2"] }
+dotenv = "0.14.1"
 log = "0.4.8"
-kankyo = "0.2"
 serenity = "0.7.1"
 
-[dev-dependencies]
+[build-dependencies]
+diesel = { version = "1.4.3", features = ["chrono", "postgres", "r2d2"] }
 diesel_migrations = { version = "1.4.0", features = ["postgres"] }
+dotenv = "0.14.1"
