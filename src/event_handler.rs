@@ -27,14 +27,14 @@ impl EventHandler for DiscordHandler {
 
     fn message_delete(&self, _: Context, _: ChannelId, message_id: MessageId) {
         // Mark corresponding message states as deleted in the database.
-        MessageState::mark_as_deleted(message_id, &self.database_pool.get().unwrap()).unwrap();
+        MessageState::mark_as_deleted(message_id, &self.database_pool.get().unwrap());
     }
 
     fn message_delete_bulk(&self, _: Context, _: ChannelId, message_ids: Vec<MessageId>) {
         // Mark corresponding message states as deleted in the database.
         let connection = self.database_pool.get().unwrap();
         for message_id in message_ids.iter() {
-            MessageState::mark_as_deleted(*message_id, &connection).unwrap();
+            MessageState::mark_as_deleted(*message_id, &connection);
         }
     }
 

@@ -7,5 +7,3 @@ CREATE TABLE message_states (
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id, created_at)
 );
-
-SELECT diesel_manage_updated_at('message_states');

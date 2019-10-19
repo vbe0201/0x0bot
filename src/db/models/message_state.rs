@@ -49,10 +49,11 @@ impl MessageState {
             .expect("Failed to retrieve the original message!")
     }
 
-    pub fn mark_as_deleted(message_id: MessageId, connection: &PgConnection) -> QueryResult<usize> {
+    pub fn mark_as_deleted(message_id: MessageId, connection: &PgConnection) -> usize {
         diesel::update(message_states::table)
             .filter(message_states::id.eq(message_id.0 as i64))
             .set(message_states::deleted.eq(true))
             .execute(connection)
+            .expect("Failed to update corresponding columns!")
     }
 }
