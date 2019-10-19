@@ -5,14 +5,15 @@ use serenity::model::{channel::Message, id::MessageId};
 
 use crate::db::schema::message_states;
 
-#[table_name = "message_states"]
 #[derive(AsChangeset, Queryable, Insertable)]
+#[table_name = "message_states"]
 pub struct MessageState {
     pub id: i64,
     pub created_at: NaiveDateTime,
     pub channel: i64,
     pub author: i64,
     pub content: Option<String>,
+    pub attachments: Option<Vec<Vec<u8>>>,
     pub deleted: bool,
 }
 
@@ -24,6 +25,13 @@ impl From<Message> for MessageState {
             channel: message.channel_id.0 as i64,
             author: message.author.id.0 as i64,
             content: Option::from(message.content.clone()),
+            attachments: Option::from(
+                message
+                    .attachments
+                    .iter()
+                    .map(|attachment| attachment.download().unwrap())
+                    .collect::<Vec<Vec<u8>>>(),
+            ),
             deleted: false,
         }
     }

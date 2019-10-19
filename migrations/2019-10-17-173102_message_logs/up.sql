@@ -4,6 +4,7 @@ CREATE TABLE message_states (
     channel BIGINT NOT NULL,
     author BIGINT NOT NULL,
     content TEXT,
+    attachments BYTEA[],
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id, created_at)
 );

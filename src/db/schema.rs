@@ -5,6 +5,7 @@ table! {
         channel -> Int8,
         author -> Int8,
         content -> Nullable<Text>,
+        attachments -> Nullable<Array<Bytea>>,
         deleted -> Bool,
     }
 }
