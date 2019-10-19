@@ -16,8 +16,10 @@ use serenity::prelude::Client;
 
 use self::event_handler::DiscordHandler;
 
+mod commands;
 mod db;
 mod event_handler;
+mod utils;
 
 fn main() {
     // In case a `.env` file is present, export variables from it.
