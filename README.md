@@ -1,4 +1,4 @@
-# 0x0bot <img src="https://forthebadge.com/images/badges/built-by-developers.svg" height="30"/> <img src="https://forthebadge.com/images/badges/built-with-love.svg" height="30"/> <img src="https://forthebadge.com/images/badges/contains-technical-debt.svg" height="30"/> 
+# 0x0bot   <img src="https://forthebadge.com/images/badges/built-by-developers.svg" height="30"/> <img src="https://forthebadge.com/images/badges/built-with-love.svg" height="30"/> <img src="https://forthebadge.com/images/badges/contains-technical-debt.svg" height="30"/> 
 
 This bot is powered by the staff members of the [**0x0b**](https://discord.0x0b.cc) Discord guild. 
 
@@ -6,7 +6,7 @@ This bot is powered by the staff members of the [**0x0b**](https://discord.0x0b.
 
 ---
 
-## Implemenation
+## Implementation
 
 We decided to create the bot using the [**Rust**](https://www.rust-lang.org/) language with the help of the Discord API wrapper [**Serenity**](https://github.com/serenity-rs/serenity).
 
