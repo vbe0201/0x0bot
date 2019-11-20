@@ -11,7 +11,7 @@ chrono = "0.4.9"
 diesel = { version = "1.4.3", features = ["chrono", "postgres", "r2d2"] }
 dotenv = "0.14.1"
 log = "0.4.8"
-serenity = "0.7.1"
+serenity = "0.7.3"
 
 [build-dependencies]
 diesel = { version = "1.4.3", features = ["chrono", "postgres", "r2d2"] }
