@@ -41,9 +41,9 @@ impl EventHandler for DiscordHandler {
     fn message_update(
         &self,
         _: Context,
-        old_message: Option<Message>,
+        _: Option<Message>,
         new_message: Option<Message>,
-        event: MessageUpdateEvent,
+        _: MessageUpdateEvent,
     ) {
         // Save message state to database.
         MessageState::create(new_message.unwrap(), &self.database_pool.get().unwrap());

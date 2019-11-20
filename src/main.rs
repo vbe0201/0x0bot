@@ -14,7 +14,8 @@ use std::env;
 
 use serenity::prelude::Client;
 
-use self::event_handler::DiscordHandler;
+use db::create_pool;
+use event_handler::DiscordHandler;
 
 mod commands;
 mod db;
@@ -26,18 +27,21 @@ fn main() {
     // Otherwise assume the environment already provides them.
     dotenv::dotenv().ok();
 
+    // Acquire the previously exported variables to run the bot.
     let token = env::var("DISCORD_TOKEN")
         .expect("Please set the DISCORD_TOKEN environment variable before running the bot.");
     let database_url = env::var("DATABASE_URL")
         .expect("Please set the DATABASE_URL environment variable before running the bot.");
 
-    // Currently unused.
-    let database_pool = db::create_pool(database_url.as_str());
+    // Establish the database connection.
+    let database_pool = create_pool(&database_url);
 
+    // Create the Discord bot instance.
     let mut client = Client::new(&token, DiscordHandler { database_pool })
         .expect("An error occurred during client creation.");
 
-    if let Err(why) = client.start() {
-        println!("Failed to connect: {:?}", why);
+    // Run the bot or print the connection errors, if any.
+    if let Err(reason) = client.start() {
+        println!("Failed to connect: {:?}", reason);
     }
 }
