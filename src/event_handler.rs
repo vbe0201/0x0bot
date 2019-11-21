@@ -9,44 +9,53 @@ use serenity::{
     prelude::*,
 };
 
-use crate::db::{MessageState, PgPool};
+use crate::db::{DatabaseConnection, MessageState};
 
-pub struct DiscordHandler {
-    // DiscordHandler holds an immutable reference
-    // to a PgPool object because we need to have
-    // access to the database in Discord events
-    // for logging purposes.
-    pub database_pool: PgPool,
-}
+pub struct DiscordHandler;
 
 impl EventHandler for DiscordHandler {
-    fn message(&self, _: Context, message: Message) {
+    fn message(&self, ctx: Context, message: Message) {
+        // Acquire database pool from shared context data.
+        let data = ctx.data.write();
+        let pool = data.get::<DatabaseConnection>().unwrap();
+
         // Save message to database.
-        MessageState::create(message, &self.database_pool.get().unwrap());
+        MessageState::create(message, &pool.lock().unwrap());
     }
 
-    fn message_delete(&self, _: Context, _: ChannelId, message_id: MessageId) {
+    fn message_delete(&self, ctx: Context, _: ChannelId, message_id: MessageId) {
+        // Acquire database pool from shared context data.
+        let data = ctx.data.write();
+        let pool = data.get::<DatabaseConnection>().unwrap();
+
         // Mark corresponding message states as deleted in the database.
-        MessageState::mark_as_deleted(message_id, &self.database_pool.get().unwrap());
+        MessageState::mark_as_deleted(message_id, &pool.lock().unwrap());
     }
 
-    fn message_delete_bulk(&self, _: Context, _: ChannelId, message_ids: Vec<MessageId>) {
+    fn message_delete_bulk(&self, ctx: Context, _: ChannelId, message_ids: Vec<MessageId>) {
+        // Acquire database pool from shared context data.
+        let data = ctx.data.write();
+        let pool = data.get::<DatabaseConnection>().unwrap();
+
         // Mark corresponding message states as deleted in the database.
-        let connection = self.database_pool.get().unwrap();
         for message_id in message_ids.iter() {
-            MessageState::mark_as_deleted(*message_id, &connection);
+            MessageState::mark_as_deleted(*message_id, &pool.lock().unwrap());
         }
     }
 
     fn message_update(
         &self,
-        _: Context,
+        ctx: Context,
         _: Option<Message>,
         new_message: Option<Message>,
         _: MessageUpdateEvent,
     ) {
+        // Acquire database pool from shared context data.
+        let data = ctx.data.write();
+        let pool = data.get::<DatabaseConnection>().unwrap();
+
         // Save message state to database.
-        MessageState::create(new_message.unwrap(), &self.database_pool.get().unwrap());
+        MessageState::create(new_message.unwrap(), &pool.lock().unwrap());
     }
 
     fn ready(&self, _: Context, ready: Ready) {

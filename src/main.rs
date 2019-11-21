@@ -7,14 +7,16 @@ extern crate dotenv;
 
 extern crate log;
 
-#[macro_use]
 extern crate serenity;
 
+extern crate typemap;
+
 use std::env;
+use std::sync::{Arc, Mutex};
 
-use serenity::prelude::Client;
+use serenity::client::Client;
 
-use db::create_pool;
+use db::{DatabaseConnection, create_pool};
 use event_handler::DiscordHandler;
 
 mod commands;
@@ -37,8 +39,15 @@ fn main() {
     let database_pool = create_pool(&database_url);
 
     // Create the Discord bot instance.
-    let mut client = Client::new(&token, DiscordHandler { database_pool })
+    let mut client = Client::new(&token, DiscordHandler)
         .expect("An error occurred during client creation.");
+
+    // Store `database_pool` in the client's data ShareMap
+    // to access it inside of events and commands.
+    {
+        let mut data = client.data.write();
+        data.insert::<DatabaseConnection>(Arc::new(Mutex::new(database_pool)));
+    }
 
     // Run the bot or print the connection errors, if any.
     if let Err(reason) = client.start() {

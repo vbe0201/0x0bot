@@ -1,9 +1,12 @@
 use chrono::NaiveDateTime;
 use diesel;
-use diesel::{pg::PgConnection, prelude::*};
+use diesel::prelude::*;
 use serenity::model::{channel::Message, id::MessageId};
 
-use crate::db::schema::message_states;
+use crate::db::{
+    pool::PgPool,
+    schema::message_states,
+};
 
 #[derive(AsChangeset, Queryable, Insertable)]
 #[table_name = "message_states"]
@@ -38,30 +41,30 @@ impl From<Message> for MessageState {
 }
 
 impl MessageState {
-    pub fn create(message: Message, connection: &PgConnection) -> MessageState {
+    pub fn create(message: Message, connection: &PgPool) -> MessageState {
         let message_state = MessageState::from(message);
 
         diesel::insert_into(message_states::table)
             .values(&message_state)
-            .execute(connection)
+            .execute(&connection.get().unwrap())
             .expect("Failed to create new message state!");
 
         message_state
     }
 
-    pub fn get_original(message_id: MessageId, connection: &PgConnection) -> MessageState {
+    pub fn get_original(message_id: MessageId, connection: &PgPool) -> MessageState {
         message_states::table
             .filter(message_states::id.eq(message_id.0 as i64))
             .order(message_states::created_at)
-            .first(connection)
+            .first(&connection.get().unwrap())
             .expect("Failed to retrieve the original message!")
     }
 
-    pub fn mark_as_deleted(message_id: MessageId, connection: &PgConnection) -> usize {
+    pub fn mark_as_deleted(message_id: MessageId, connection: &PgPool) -> usize {
         diesel::update(message_states::table)
             .filter(message_states::id.eq(message_id.0 as i64))
             .set(message_states::deleted.eq(true))
-            .execute(connection)
+            .execute(&connection.get().unwrap())
             .expect("Failed to update corresponding columns!")
     }
 }
